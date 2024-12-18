@@ -1,514 +1,140 @@
-<!DOCTYPE html>
-<html lang="vi">
+<div class="site-header">
+  <h1 class="glow-text">Trang Web Hỗ Trợ Traffic</h1>
+</div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto View Ads</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src='//niphaumeenses.net/vignette.min.js' data-zone='8661788' data-sdk='show_8661788'></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Rajdhani', sans-serif;
-        }
-        
-         :root {
-            --primary-red: #ff1a1a;
-            --dark-red: #990000;
-            --bg-dark: #0a0a0a;
-            --card-bg: #1a1a1a;
-        }
-        
-        body {
-            background: var(--bg-dark);
-            color: #ffffff;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        /* PC Layout */
-        
-        @media (min-width: 1024px) {
-            .container {
-                display: grid;
-                grid-template-columns: 300px 1fr;
-                gap: 20px;
-                max-width: 1400px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            .sidebar {
-                position: sticky;
-                top: 20px;
-                height: calc(100vh - 40px);
-                overflow-y: auto;
-            }
-            .main-content {
-                padding: 0 20px;
-            }
-            header {
-                grid-column: 1 / -1;
-            }
-        }
-        /* Mobile Layout */
-        
-        @media (max-width: 1023px) {
-            .container {
-                padding: 10px;
-            }
-            .sidebar,
-            .main-content {
-                width: 100%;
-            }
-        }
-        /* Header Styles */
-        
-        header {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
-            border-radius: 15px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header h1 {
-            font-size: clamp(1.8rem, 4vw, 2.5rem);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        /* User Info Card */
-        
-        .user-info {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .user-info h2 {
-            color: var(--primary-red);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .info-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        /* Stats Card */
-        
-        .stats-card {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .stat-value {
-            font-size: clamp(2rem, 5vw, 3rem);
-            color: var(--primary-red);
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
-        /* Action Cards */
-        
-        .action-card {
-            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .action-card h2 {
-            color: var(--primary-red);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        /* Buttons */
-        
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
-        }
-        /* History List */
-        
-        .history-list {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 15px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .history-item {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        /* Status Indicator */
-        
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--primary-red);
-            margin-right: 8px;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.2);
-                opacity: 0.7;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-        /* Custom Scrollbar */
-        
-         ::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-         ::-webkit-scrollbar-thumb {
-            background: var(--primary-red);
-            border-radius: 3px;
-        }
-        /* Animations */
-        
-        .animate-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        /* Thêm style cho logo team */
-        
-        .team-logo {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            background: rgba(26, 26, 26, 0.9);
-            padding: 10px 15px;
-            border-radius: 50px;
-            box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-        
-        .team-logo span {
-            color: #fff;
-            margin-left: 8px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        .team-logo img {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-        }
-        /* Style cho avatar người dùng */
-        
-        .user-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 15px auto;
-            border: 3px solid var(--primary-red);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .user-avatar.no-image {
-            background: linear-gradient(135deg, #1a1a1a, #0f0f0f);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: var(--primary-red);
-        }
-        
-        @media (max-width: 768px) {
-            .team-logo {
-                bottom: 10px;
-                right: 10px;
-                padding: 8px 12px;
-            }
-        }
-        /* Thêm vào phần style */
-        
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
-            color: white;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.2);
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-        
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        
-        @media (max-width: 768px) {
-            .toast {
-                width: 90%;
-                text-align: center;
-            }
-        }
-    </style>
-</head>
+<div class="button-container">
+  <div class="button-wrapper">
+    <a href="https://vnvn.top/GWLN2" class="smooth-button blue" id="button1" target="_blank">Liên kết 1</a>
+  </div>
+</div>
 
-<body>
-    <div class="container">
-        <header class="animate-in">
-            <h1>Auto View Ads</h1>
-            <p>Xem quảng cáo không giới hạn</p>
-        </header>
+<style>
+.site-header {
+  text-align: center;
+  margin: 40px 0;
+}
 
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="user-info animate-in">
-                <h2>Thông Tin Telegram</h2>
-                <div class="user-avatar" id="userAvatar">
-                    <div class="no-image">👤</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Tên</div>
-                    <div class="info-value" id="telegramName">Loading...</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">Username</div>
-                    <div class="info-value" id="telegramUsername">Loading...</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">ID</div>
-                    <div class="info-value" id="telegramId">Loading...</div>
-                </div>
-            </div>
+.glow-text {
+  color: #fff;
+  font-size: 36px;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-shadow: 0 0 10px #00ff00,
+               0 0 20px #00ff00,
+               0 0 30px #00ff00;
+  animation: glow 2s ease-in-out infinite alternate;
+}
 
-            <div class="stats-card animate-in">
-                <div class="stat-value" id="viewCount">0</div>
-                <p>Tổng Lượt Xem</p>
-            </div>
-        </aside>
+@keyframes glow {
+  from {
+    text-shadow: 0 0 10px #00ff00,
+                 0 0 20px #00ff00,
+                 0 0 30px #00ff00;
+  }
+  to {
+    text-shadow: 0 0 20px #00ff00,
+                 0 0 30px #00ff00,
+                 0 0 40px #00ff00;
+  }
+}
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="action-card animate-in">
-                <h2>Xem Quảng Cáo</h2>
-                <p>Nhấn nút bên dưới để xem quảng cáo</p>
-                <button class="btn" onclick="showAd()">Xem Quảng Cáo</button>
-            </div>
+body {
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-            <div class="action-card animate-in">
-                <h2>Tự Động Xem</h2>
-                <div class="status-text" id="autoStatus" style="display: none;">
-                    <span class="status-indicator"></span>
-                    <span>Đang tự động xem</span>
-                </div>
-                <button class="btn" id="autoAdBtn" onclick="startAutoAds()">
-                    Bắt Đầu Tự Động
-                </button>
-            </div>
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0;
+  position: relative;
+  z-index: 1;
+}
 
-            <div class="action-card animate-in">
-                <h2>Lịch Sử Xem</h2>
-                <div class="history-list" id="history-list"></div>
-            </div>
-        </main>
-    </div>
+.button-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
 
-    <div class="team-logo animate-in">
-        <img src="https://i.pinimg.com/736x/aa/af/17/aaaf17a2e770f9d7defda2ee99bc180c.jpg" alt="Team Logo">
-        <span>Dev by Thanhhung</span>
-    </div>
+.smooth-button {
+  padding: 16px 32px;
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+  text-align: center;
+  border: 2px solid transparent;
+}
 
-    <script>
-        let viewCount = 0;
-        let viewHistory = [];
-        let autoAdsInterval;
-        let isAutoPlaying = false;
+.smooth-button.blue {
+  background: linear-gradient(45deg, #2196F3, #21CBF3);
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3),
+              inset 0 0 0 rgba(255, 255, 255, 0.2);
+}
 
-        // Telegram WebApp
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+.smooth-button.purple {
+  background: linear-gradient(45deg, #9C27B0, #E040FB);
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3),
+              inset 0 0 0 rgba(255, 255, 255, 0.2);
+}
 
-        function showAd() {
-            if (typeof show_8661788 === 'function') {
-                show_8661788().then(() => {
-                    viewCount++;
-                    document.getElementById('viewCount').textContent = viewCount;
-                    viewHistory.unshift({
-                        date: new Date()
-                    });
-                    updateHistory();
-                    showToast('Đã xem quảng cáo thành công!');
-                }).catch((error) => {
-                    console.error('Lỗi hiển thị quảng cáo:', error);
-                    showToast('Lỗi khi tải quảng cáo');
-                });
-            }
-        }
+.smooth-button:hover {
+  transform: translateY(-5px) scale(1.05);
+  filter: brightness(120%);
+  border-color: rgba(255, 255, 255, 0.2);
+}
 
-        function startAutoAds() {
-            isAutoPlaying = true;
-            const btn = document.getElementById('autoAdBtn');
-            const statusDiv = document.getElementById('autoStatus');
+.smooth-button.blue:hover {
+  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.6),
+              inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
 
-            btn.textContent = 'Dừng Tự Động';
-            btn.style.background = 'linear-gradient(135deg, #cc0000, #990000)';
-            btn.onclick = stopAutoAds;
-            statusDiv.style.display = 'flex';
+.smooth-button.purple:hover {
+  box-shadow: 0 8px 25px rgba(156, 39, 176, 0.6),
+              inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
 
-            showToast('Đã bắt đầu tự động xem');
-            autoAdsInterval = setInterval(showAd, 2000);
-        }
+.smooth-button:active {
+  transform: translateY(2px);
+  filter: brightness(90%);
+}
 
-        function stopAutoAds() {
-            isAutoPlaying = false;
-            const btn = document.getElementById('autoAdBtn');
-            const statusDiv = document.getElementById('autoStatus');
+@media (max-width: 768px) {
+  .glow-text {
+    font-size: 24px;
+  }
 
-            btn.textContent = 'Bắt Đầu Tự Động';
-            btn.style.background = 'linear-gradient(135deg, #ff1a1a, #cc0000)';
-            btn.onclick = startAutoAds;
-            statusDiv.style.display = 'none';
+  .button-wrapper {
+    padding: 20px;
+    gap: 15px;
+  }
 
-            clearInterval(autoAdsInterval);
-            showToast('Đã dừng tự động xem');
-        }
-
-        // Thêm hàm hiển thị toast notification
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 100);
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 3000);
-        }
-
-        // Thay đổi HTML button auto để sử dụng startAutoAds thay vì toggleAutoAds
-        document.getElementById('autoAdBtn').onclick = startAutoAds;
-
-        function updateHistory() {
-            const historyList = document.getElementById('history-list');
-            historyList.innerHTML = '';
-
-            viewHistory.slice(0, 50).forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'history-item';
-                div.innerHTML = `
-                    <span>👁 Đã xem quảng cáo</span>
-                    <span>${item.date.toLocaleTimeString()}</span>
-                `;
-                historyList.appendChild(div);
-            });
-        }
-
-        function updateTelegramInfo() {
-            const user = tg.initDataUnsafe.user;
-            if (user) {
-                document.getElementById('telegramName').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-                document.getElementById('telegramUsername').textContent = user.username || 'Không có username';
-                document.getElementById('telegramId').textContent = user.id;
-
-                // Cập nhật avatar
-                const avatarContainer = document.getElementById('userAvatar');
-                if (user.photo_url) {
-                    avatarContainer.innerHTML = `<img src="${user.photo_url}" alt="User Avatar">`;
-                    avatarContainer.classList.remove('no-image');
-                } else {
-                    avatarContainer.innerHTML = `<div class="no-image">👤</div>`;
-                    avatarContainer.classList.add('no-image');
-                }
-            } else {
-                document.getElementById('telegramName').textContent = 'Không có thông tin';
-                document.getElementById('telegramUsername').textContent = 'Không có thông tin';
-                document.getElementById('telegramId').textContent = 'Không có thông tin';
-
-                const avatarContainer = document.getElementById('userAvatar');
-                avatarContainer.innerHTML = `<div class="no-image">👤</div>`;
-                avatarContainer.classList.add('no-image');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', updateTelegramInfo);
-    </script>
-</body>
-
-</html>
+  .smooth-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    min-width: 150px;
+  }
+}
+</style>

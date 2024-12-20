@@ -1,140 +1,79 @@
-<div class="site-header">
-  <h1 class="glow-text">Trang Web Hỗ Trợ Traffic</h1>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin Android</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Thông tin thiết bị Android</h1>
+    <p>Dữ liệu dưới đây được thu thập từ trình duyệt:</p>
+    <pre id="info"></pre>
 
-<div class="button-container">
-  <div class="button-wrapper">
-    <a href="https://vnvn.top/GWLN2" class="smooth-button blue" id="button1" target="_blank">Liên kết 1</a>
-  </div>
-</div>
+    <script>
+        function getDeviceInfo() {
+            const deviceInfo = {
+                "Tên thiết bị (dự đoán)": detectDeviceModel(),
+                "User Agent": navigator.userAgent,
+                "Ngôn ngữ": navigator.language,
+                "Nền tảng": navigator.platform,
+                "Online": navigator.onLine ? "Có" : "Không",
+                "Loại thiết bị": detectDeviceType(),
+                "Hệ điều hành": detectOS(),
+                "Độ phân giải màn hình": `${screen.width} x ${screen.height}`,
+                "DPI (Device Pixel Ratio)": window.devicePixelRatio,
+                "Cảm ứng hỗ trợ": navigator.maxTouchPoints > 0 ? "Có" : "Không",
+                "Bộ nhớ khả dụng (GB)": navigator.deviceMemory || "Không hỗ trợ",
+                "Số luồng CPU": navigator.hardwareConcurrency || "Không hỗ trợ",
+                "Cookie được bật": navigator.cookieEnabled ? "Có" : "Không",
+                "Chế độ không làm phiền (DND)": navigator.doNotTrack || "Không xác định"
+            };
+            return deviceInfo;
+        }
 
-<style>
-.site-header {
-  text-align: center;
-  margin: 40px 0;
-}
+        function detectDeviceModel() {
+            const ua = navigator.userAgent.toLowerCase();
+            if (ua.includes("samsung")) return "Samsung (dự đoán từ User Agent)";
+            if (ua.includes("xiaomi")) return "Xiaomi (dự đoán từ User Agent)";
+            if (ua.includes("huawei")) return "Huawei (dự đoán từ User Agent)";
+            if (ua.includes("oppo")) return "Oppo (dự đoán từ User Agent)";
+            if (ua.includes("vivo")) return "Vivo (dự đoán từ User Agent)";
+            return "Không xác định (User Agent không đủ thông tin)";
+        }
 
-.glow-text {
-  color: #fff;
-  font-size: 36px;
-  text-transform: uppercase;
-  font-weight: bold;
-  text-shadow: 0 0 10px #00ff00,
-               0 0 20px #00ff00,
-               0 0 30px #00ff00;
-  animation: glow 2s ease-in-out infinite alternate;
-}
+        function detectDeviceType() {
+            const ua = navigator.userAgent.toLowerCase();
+            if (ua.includes("mobile")) return "Điện thoại";
+            if (ua.includes("tablet")) return "Máy tính bảng";
+            return "Máy tính để bàn";
+        }
 
-@keyframes glow {
-  from {
-    text-shadow: 0 0 10px #00ff00,
-                 0 0 20px #00ff00,
-                 0 0 30px #00ff00;
-  }
-  to {
-    text-shadow: 0 0 20px #00ff00,
-                 0 0 30px #00ff00,
-                 0 0 40px #00ff00;
-  }
-}
+        function detectOS() {
+            const ua = navigator.userAgent;
+            if (ua.includes("Android")) return "Android";
+            if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
+            return "Hệ điều hành không xác định";
+        }
 
-body {
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  min-height: 100vh;
-  margin: 0;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 30px 0;
-  position: relative;
-  z-index: 1;
-}
-
-.button-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 25px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 30px;
-  border-radius: 15px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.smooth-button {
-  padding: 16px 32px;
-  color: white;
-  text-decoration: none;
-  border-radius: 30px;
-  font-size: 18px;
-  font-weight: bold;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  position: relative;
-  display: inline-block;
-  min-width: 200px;
-  text-align: center;
-  border: 2px solid transparent;
-}
-
-.smooth-button.blue {
-  background: linear-gradient(45deg, #2196F3, #21CBF3);
-  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3),
-              inset 0 0 0 rgba(255, 255, 255, 0.2);
-}
-
-.smooth-button.purple {
-  background: linear-gradient(45deg, #9C27B0, #E040FB);
-  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3),
-              inset 0 0 0 rgba(255, 255, 255, 0.2);
-}
-
-.smooth-button:hover {
-  transform: translateY(-5px) scale(1.05);
-  filter: brightness(120%);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.smooth-button.blue:hover {
-  box-shadow: 0 8px 25px rgba(33, 150, 243, 0.6),
-              inset 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-.smooth-button.purple:hover {
-  box-shadow: 0 8px 25px rgba(156, 39, 176, 0.6),
-              inset 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-.smooth-button:active {
-  transform: translateY(2px);
-  filter: brightness(90%);
-}
-
-@media (max-width: 768px) {
-  .glow-text {
-    font-size: 24px;
-  }
-
-  .button-wrapper {
-    padding: 20px;
-    gap: 15px;
-  }
-
-  .smooth-button {
-    padding: 12px 24px;
-    font-size: 16px;
-    min-width: 150px;
-  }
-}
-</style>
+        document.getElementById("info").textContent = JSON.stringify(getDeviceInfo(), null, 4);
+    </script>
+</body>
+</html>

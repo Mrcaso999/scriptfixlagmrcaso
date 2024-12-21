@@ -1,79 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thông tin Android</title>
+    <title>Thông tin User Agent</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
             line-height: 1.6;
-            background-color: #f9f9f9;
+            margin: 20px;
         }
-        h1 {
-            color: #4CAF50;
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
-        pre {
-            background: #f4f4f4;
-            padding: 10px;
+        
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow-x: auto;
+        }
+        
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f4f4f4;
         }
     </style>
 </head>
+
 <body>
-    <h1>Thông tin thiết bị Android</h1>
-    <p>Dữ liệu dưới đây được thu thập từ trình duyệt:</p>
-    <pre id="info"></pre>
-
+    <h1>Danh sách truy cập</h1>
+    <p>Thông tin các thiết bị truy cập trang web:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Thời gian truy cập</th>
+                <th>User Agent</th>
+                <th>Nền tảng</th>
+                <th>Ngôn ngữ</th>
+            </tr>
+        </thead>
+        <tbody id="info-table"></tbody>
+    </table>
     <script>
-        function getDeviceInfo() {
-            const deviceInfo = {
-                "Tên thiết bị (dự đoán)": detectDeviceModel(),
-                "User Agent": navigator.userAgent,
-                "Ngôn ngữ": navigator.language,
-                "Nền tảng": navigator.platform,
-                "Online": navigator.onLine ? "Có" : "Không",
-                "Loại thiết bị": detectDeviceType(),
-                "Hệ điều hành": detectOS(),
-                "Độ phân giải màn hình": `${screen.width} x ${screen.height}`,
-                "DPI (Device Pixel Ratio)": window.devicePixelRatio,
-                "Cảm ứng hỗ trợ": navigator.maxTouchPoints > 0 ? "Có" : "Không",
-                "Bộ nhớ khả dụng (GB)": navigator.deviceMemory || "Không hỗ trợ",
-                "Số luồng CPU": navigator.hardwareConcurrency || "Không hỗ trợ",
-                "Cookie được bật": navigator.cookieEnabled ? "Có" : "Không",
-                "Chế độ không làm phiền (DND)": navigator.doNotTrack || "Không xác định"
-            };
-            return deviceInfo;
+        // Lấy danh sách thông tin từ localStorage
+        const storageKey = 'accessLog';
+        let accessLog = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        // Thu thập thông tin thiết bị hiện tại
+        const currentInfo = {
+            time: new Date().toLocaleString(),
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language
+        };
+
+        // Kiểm tra nếu thiết bị chưa từng truy cập, thì thêm vào danh sách
+        const isNewDevice = !accessLog.some(entry => entry.userAgent === currentInfo.userAgent && entry.platform === currentInfo.platform);
+        if (isNewDevice) {
+            accessLog.push(currentInfo);
+            localStorage.setItem(storageKey, JSON.stringify(accessLog));
         }
 
-        function detectDeviceModel() {
-            const ua = navigator.userAgent.toLowerCase();
-            if (ua.includes("samsung")) return "Samsung (dự đoán từ User Agent)";
-            if (ua.includes("xiaomi")) return "Xiaomi (dự đoán từ User Agent)";
-            if (ua.includes("huawei")) return "Huawei (dự đoán từ User Agent)";
-            if (ua.includes("oppo")) return "Oppo (dự đoán từ User Agent)";
-            if (ua.includes("vivo")) return "Vivo (dự đoán từ User Agent)";
-            return "Không xác định (User Agent không đủ thông tin)";
-        }
-
-        function detectDeviceType() {
-            const ua = navigator.userAgent.toLowerCase();
-            if (ua.includes("mobile")) return "Điện thoại";
-            if (ua.includes("tablet")) return "Máy tính bảng";
-            return "Máy tính để bàn";
-        }
-
-        function detectOS() {
-            const ua = navigator.userAgent;
-            if (ua.includes("Android")) return "Android";
-            if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
-            return "Hệ điều hành không xác định";
-        }
-
-        document.getElementById("info").textContent = JSON.stringify(getDeviceInfo(), null, 4);
+        // Hiển thị danh sách truy cập
+        const tableBody = document.getElementById('info-table');
+        accessLog.forEach(info => {
+            const row = `
+                <tr>
+                    <td>${info.time}</td>
+                    <td>${info.userAgent}</td>
+                    <td>${info.platform}</td>
+                    <td>${info.language}</td>
+                </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+        });
     </script>
 </body>
+
 </html>

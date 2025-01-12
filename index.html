@@ -166,9 +166,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Lấy thông tin referrer
-            const referrer = document.referrer || 'Truy cập trực tiếp';
-            const referrerDomain = getReferrerDomain(referrer);
+            // Lấy thông tin referrer và URL hiện tại
+            const referrer = document.referrer;
+            const currentUrl = window.location.href;
+            
+            // Kiểm tra nguồn truy cập
+            let referrerSource = 'Truy cập trực tiếp';
+            if (referrer) {
+                referrerSource = getReferrerDomain(referrer);
+            } else if (currentUrl.includes('bit.ly/')) {
+                referrerSource = 'Bit.ly';
+            }
             
             // Lấy thông tin website hiện tại
             const currentWebsite = window.location.href;
@@ -182,8 +190,8 @@
             const osInfo = getOSInfo(userAgent);
             
             // Hiển thị thông tin
-            document.getElementById('referrer').textContent = referrerDomain;
-            document.getElementById('fullReferrer').textContent = referrer;
+            document.getElementById('referrer').textContent = referrerSource;
+            document.getElementById('fullReferrer').textContent = referrer || currentUrl;
             document.getElementById('website').textContent = currentWebsite;
             document.getElementById('timestamp').textContent = timestamp;
             document.getElementById('browser').textContent = browserInfo;
